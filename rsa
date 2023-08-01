@@ -1,35 +1,35 @@
 #!/usr/bin/env bash
-#is a challenge
+
 check_factor()
 {
 	if [ $# -ne 3 ];
         then
                 args=("$@")
-                cnt=0
-                nbr2=1
+                count=0
+                num2=1
                 for a in ${args[*]};
                 do
-                        if [ $cnt -gt 1 ];
+                        if [ $count -gt 1 ];
                         then
-                                nbr2=$(echo $a*$nbr2 | bc)
+                                num2=$(echo $a*$num2 | bc)
                         fi
-                        cnt=$((cnt + 1))
+                        count=$((count + 1))
                 done
         else
-                nbr2=$3
+                num2=$3
         fi
 
-        nbr1=$2
-        nbr=$(echo "$1" | tr ':' '=')
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
-        result=$(echo "if($nbr2 > $nbr1) 1 else 0" | bc)
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
 	        if ((result == 1)); then
-		        nbrcp=$nbr1
-		        nbr1=$nbr2
-		        nbr2=$nbrcp
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
                 fi
 
-        echo "$nbr$nbr1*$nbr2"
+        echo "$num$num1*$num2"
 }
 
 if [ $# -ne 1 ]
