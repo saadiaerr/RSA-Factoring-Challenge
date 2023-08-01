@@ -1,29 +1,48 @@
-#!/usr/bin/env python3
-from sys import argv
-from math import sqrt
+#!/usr/bin/env bash
 
+check_factor()
+{
+	if [ $# -ne 3 ];
+        then
+                args=("$@")
+                count=0
+                num2=1
+                for a in ${args[*]};
+                do
+                        if [ $count -gt 1 ];
+                        then
+                                num2=$(echo $a*$num2 | bc)
+                        fi
+                        count=$((count + 1))
+                done
+        else
+                num2=$3
+        fi
 
-def open_read_file(file_nm):
-    with open(file_nm, "r", encoding="utf-8") as file:
-        lines_tot = file.readlines()
-    number_to_factor = []
-    for line_nbr in lines_tot:
-        number_to_factor.append(int(line_nbr))
-    return number_to_factor
+        num1=$2
+        num=$(echo "$1" | tr ':' '=')
 
+        result=$(echo "if($num2 > $num1) 1 else 0" | bc)
+	        if ((result == 1)); then
+		        numcp=$num1
+		        num1=$num2
+		        num2=$numcp
+                fi
 
-def find_and_times(nbr):
-    for i in range(1, nbr):
-        if nbr == ((nbr // i) * i):
-            print("{}={}*{}".format(nbr, (nbr // i), i))
-            break
+        echo "$num$num1*$num2"
+}
 
+if [ $# -ne 1 ]
+then
+        echo 'Usage: factors <file>'
+        exit 1
+else
 
-def fact_lst(lst):
+        while read i
+        do
 
-    for a in lst:
-        find_and_times(a)
+                result=$(factor "$i")
+                check_factor $result
 
-
-if len(argv) == 2:
-    fact_lst(open_read_file(argv[1]))
+        done < "$1"
+fi
